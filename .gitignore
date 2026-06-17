@@ -1,0 +1,30 @@
+﻿## Visual Studio الكاش والملفات المؤقتة لبرنامج
+.vs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+
+## ملفات الإعدادات الخاصة بالمستخدم (تختلف من جهاز لجهاز)
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+## ملفات قواعد البيانات المحلية المؤقتة
+*.DotSettings.user
+*.pidb
+
+## مجلدات حزم الأدوات والمكتبات (يتم تحميلها تلقائياً لاحقاً)
+.tools/
+.nuget/
+packages/
+
+## ملفات نظام التشغيل المؤقتة
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
