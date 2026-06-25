@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package discount.grpc.proto;
+
+
+
+service DiscountProtoService {
+    rpc GetDiscount (GetDiscountRequest) returns (GetDiscountResponse);
+    rpc CreateDiscount (CreateDiscountRequest) returns (CreateDiscountResponse);
+    rpc UpdateDiscount (UpdateDiscountRequest) returns (UpdateDiscountResponse);
+    rpc DeleteDiscount (DeleteDiscountRequest) returns (DeleteDiscountResponse);
+}
+
+message GetDiscountRequest {
+    string productName = 1;
+}
+
+message GetDiscountResponse {
+    string productName = 1;
+    int32 amount = 2;
+    string description = 3;
+}
+
+message CreateDiscountRequest {
+    string productName = 1;
+    int32 amount = 2;
+    string description = 3;
+}
+
+message CreateDiscountResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message UpdateDiscountRequest {
+    int32 id = 1;
+    string productName = 2;
+    int32 amount = 3;
+    string description = 4  ;
+}
+
+message UpdateDiscountResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message DeleteDiscountRequest {
+    string productName = 1;
+}
+
+message DeleteDiscountResponse {
+    bool success = 1;
+    string message = 2;
+}

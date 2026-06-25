@@ -39,8 +39,8 @@ namespace Basket.Api.Controllers
         public async Task<IActionResult> DeleteBasketByUserName([FromQuery] string name)
         {
             var query = new DeletebasketCommand(name);
-            var res = await _mediator.Send(query); 
-            return Ok(res);
+            await _mediator.Send(query);
+            return Ok("Deleted");
         }
 
 

@@ -24,12 +24,42 @@ services:
       - "27017:27017"
     volumes:
       - catalogdata:/data/db
+
   Basketdb:
     image: redis:alpine
     container_name: Basketdb
     restart: always 
     ports:
       - "6379:6379"
+
+  Discountdb:
+     image: postgres:alpine
+     container_name: Discountdb
+     restart: always 
+     ports:
+       - "5432:5432" 
+     environment:
+       - POSTGRES_USER=admin
+       - POSTGRES_PASSWORD=password@1
+       - POSTGRES_DB=DisCountDb
+     healthcheck:
+         test: ["CMD-SHELL", "pg_isready -U admin -d DisCountDb"] 
+         interval: 10s
+         timeout: 5s
+         retries: 5
+        
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+        - "5050:80"
+    environment:
+        - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+        - PGADMIN_DEFAULT_PASSWORD=admin
+    volumes:
+        - pgadmin_data:/var/lib/pgadmin
+
   basket.api:
     image: ${DOCKER_REGISTRY-}basketapi
     build:
@@ -53,7 +83,30 @@ services:
     volumes:
     - portainer_data:/data
     - /var/run/docker.sock:/var/run/docker.sock
+     
+  
+
+  discount.api:
+    image: ${DOCKER_REGISTRY-}discountapi
+    build:
+      context: .
+      dockerfile: Services/DisCount/DisCount.Api/Dockerfile
+    container_name: discount.api
+    ports:
+      - "8002:8080"
+    depends_on:
+      Discountdb:
+        condition: service_healthy  
+    environment:
+      
+      - "ConnectionStrings__DefaultConnection=Host=Discountdb;Port=5432;Database=DisCountDb;Username=admin;Password=password@1"
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "ASPNETCORE_URLS=http://+:8080"
+      - "DOTNET_RUNNING_IN_CONTAINER=true"
 
 volumes:
   catalogdata:
   portainer_data:
+  postgres_data_v18:
+  pgadmin_data:
+
