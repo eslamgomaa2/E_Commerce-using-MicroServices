@@ -9,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace Basket.Application.Commands
 {
-    public class UpdateBasketCommand ( string UserName, List<ShopingCartItem> Items ):IRequest<ShopingCartResponse>;
+    public record UpdateBasketCommand ( string UserName, List<ShopingCartItem> Items ):IRequest<ShopingCartResponse>;
     
 }

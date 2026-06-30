@@ -1,7 +1,9 @@
-﻿using Basket.Application.Mappers;
+﻿using Basket.Application.gRPCServices;
+using Basket.Application.Mappers;
 using Basket.Application.Queries;
 using Basket.Core.Repositories;
 using Basket.Infrastructure.Repositories;
+using Discount.Grpc.Proto;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +41,8 @@ builder.Services.AddApiVersioning(cfg =>
 });
 
 builder.Services.AddScoped < IBasketRepo, BasketRepo > ();
+builder.Services.AddScoped < DiscountgRPC_Services > ();
+builder.Services.AddGrpcClient < DiscountProtoService.DiscountProtoServiceClient> (opt=>opt.Address=new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]));
 builder.Services.AddControllers();
 
 

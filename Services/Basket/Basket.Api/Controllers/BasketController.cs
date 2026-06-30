@@ -1,4 +1,5 @@
 ﻿using Basket.Application.Commands;
+using Basket.Application.gRPCServices;
 using Basket.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,13 @@ namespace Basket.Api.Controllers
     public class BasketController : BaseApiController
     {
         private readonly IMediator _mediator;
+        private readonly DiscountgRPC_Services _discountgRPC_Services;
 
-        public BasketController(IMediator mediator)
+
+        public BasketController(IMediator mediator, DiscountgRPC_Services discountgRPC_Services)
         {
             _mediator = mediator;
+            _discountgRPC_Services = discountgRPC_Services;
         }
         [HttpGet("[action]")]
 
@@ -42,6 +46,7 @@ namespace Basket.Api.Controllers
             await _mediator.Send(query);
             return Ok("Deleted");
         }
+
 
 
     }

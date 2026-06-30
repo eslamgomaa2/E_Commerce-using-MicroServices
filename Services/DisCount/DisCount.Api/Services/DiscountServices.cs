@@ -7,29 +7,29 @@ using MediatR;
 
 namespace DisCount.Api.Services
 {
-    public class DiscountServices: DiscountProtoService.DiscountProtoServiceBase
-    {
-        private readonly IMediator _mediator;
-
-        public DiscountServices(IMediator mediator)
+        public class DiscountServices: DiscountProtoService.DiscountProtoServiceBase
         {
-            _mediator = mediator;
-        }
+            private readonly IMediator _mediator;
 
-        public override async Task<CreateDiscountResponse> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
-        {
-            var command = new CreateDiscountCommand(
-                new Coupon
-                {
-                    ProductName = request.ProductName,
-                    Amount = request.Amount,
-                    Description = request.Description
-                }
-            );
+            public DiscountServices(IMediator mediator)
+            {
+                _mediator = mediator;
+            }
 
-            var res = await _mediator.Send(command);
-            return res;
-        }
+            public override async Task<CreateDiscountResponse> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
+            {
+                var command = new CreateDiscountCommand(
+                    new Coupon
+                    {
+                        ProductName = request.ProductName,
+                        Amount = request.Amount,
+                        Description = request.Description
+                    }
+                );
+
+                var res = await _mediator.Send(command);
+                return res;
+            }
 
         public override async Task<UpdateDiscountResponse> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
         {

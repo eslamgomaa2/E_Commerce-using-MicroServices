@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -12,7 +12,11 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.1.1" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.80.0" />
     <PackageReference Include="MediatR" Version="14.1.0" />
   </ItemGroup>
+	<ItemGroup>
+		<protobuf Include="..\..\..\Services\Discount\DisCount.Application\Protos\Discount.proto" link="Protos\Discount.proto" GrpcServices="Client" />
+	</ItemGroup>
 
 </Project>

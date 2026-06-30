@@ -48,7 +48,26 @@ services:
          timeout: 5s
          retries: 5
      volumes:
-      - postgres_data_v18:/var/lib/postgresql/data   
+      - postgres_data_v18:/var/lib/postgresql 
+ 
+
+  Orderdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: Orderdb
+    restart: always 
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "password@1"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433" 
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'password@1' -Q 'Select 1' -C"] 
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - orderdb_data:/var/opt/mssql
         
   pgadmin:
     image: dpage/pgadmin4
@@ -75,6 +94,7 @@ services:
       - CacheSettings__ConnectionString=Basketdb:6379
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
+      - "GrpcSettings__DiscountUrl=http://discount.api:8080"
   portainer:
     image: portainer/portainer-ce
     container_name: portainer
@@ -106,9 +126,28 @@ services:
       - "ASPNETCORE_URLS=http://+:8080"
       - "DOTNET_RUNNING_IN_CONTAINER=true"
 
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.Api/Dockerfile
+    ports:
+      - "8003:8080"
+    depends_on:
+      Orderdb:
+        condition: service_healthy
+    environment:
+      - "ConnectionStrings__OrderingConnection=Server=Orderdb;Database=OrderingDb;User Id=sa;Password=password@1;TrustServerCertificate=True"
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "ASPNETCORE_URLS=http://+:8080"
+      - "DOTNET_RUNNING_IN_CONTAINER=true"
+
+
 volumes:
   catalogdata:
   portainer_data:
   postgres_data_v18:
   pgadmin_data:
+  orderdb_data:
+
 
